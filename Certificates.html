@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificates & Achievements — Pauline Lucena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg-void: #020409;
+  --bg-surface: #070d18;
+  --bg-card: #0b1220;
+  --bg-card-hover: #0f1a2e;
+  --cyan: #00d4ff;
+  --cyan-dim: #00a0c0;
+  --cyan-glow: rgba(0,212,255,0.12);
+  --cyan-glow-strong: rgba(0,212,255,0.22);
+  --teal: #00ffcc;
+  --teal-dim: rgba(0,255,204,0.6);
+  --text-primary: #e8f4f8;
+  --text-secondary: #6b8a9a;
+  --text-muted: #3d5566;
+  --border: rgba(0,212,255,0.1);
+  --border-bright: rgba(0,212,255,0.25);
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Syne', sans-serif;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--font-mono);
+  background: var(--bg-void);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── AMBIENT BACKGROUND ── */
+.ambient-grid {
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.018) 1px, transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none; z-index:0;
+}
+#cert-canvas { position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  padding:1.2rem 3rem;
+  display:flex; justify-content:space-between; align-items:center;
+  background:rgba(2,4,9,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-left { display:flex; align-items:center; gap:1.5rem; }
+.back-btn {
+  display:flex; align-items:center; gap:0.7rem;
+  font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-secondary); border:1px solid var(--border);
+  padding:0.55rem 1.2rem; border-radius:2px;
+  transition:0.3s; text-decoration: none;
+}
+.back-btn:hover { color:var(--cyan); border-color:var(--border-bright); transform:translateX(-3px); }
+.nav-logo { font-family:var(--font-display); font-size:0.95rem; font-weight:800; color:var(--cyan); letter-spacing:2px; }
+
+.wrapper { position:relative; z-index:1; max-width:1300px; margin:0 auto; padding:8rem 2rem 6rem; }
+
+/* ── HERO ── */
+.page-hero { margin-bottom:5rem; }
+.page-title { font-family:var(--font-display); font-size:clamp(2.2rem, 5vw, 4rem); font-weight:800; color:var(--text-primary); margin-top: 1rem; }
+.page-title span { background:linear-gradient(90deg,var(--cyan),var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+/* ── GRID ── */
+.cert-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:1.5rem; }
+.cert-section { margin-bottom: 3rem; }
+.cert-section-header {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 0 0 1.5rem 0;
+}
+.cert-section-header .sh-bar { flex: 0 0 40px; height: 1px; background: var(--cyan); opacity: 0.6; }
+.cert-section-header .sh-line { flex: 1; height: 1px; background: var(--border); }
+.cert-section-header .sh-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem; font-weight: 700;
+  color: var(--text-primary); letter-spacing: 1px;
+}
+.cert-section-header .sh-count {
+  font-family: var(--font-mono);
+  font-size: 0.65rem; letter-spacing: 2px;
+  color: var(--cyan); text-transform: uppercase;
+  border: 1px solid var(--border-bright);
+  padding: 0.3rem 0.7rem; border-radius: 2px;
+}
+.cert-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:4px;
+  overflow:hidden; cursor:pointer; position:relative; transition:0.4s var(--ease-out);
+}
+.cert-card:hover { transform:translateY(-7px); border-color:var(--border-bright); box-shadow:0 20px 40px rgba(0,0,0,0.4); }
+.img-wrap { position:relative; height:220px; overflow:hidden; background: #000; }
+.img-wrap img { width:100%; height:100%; object-fit:cover; opacity:0.7; transition:0.7s; }
+.cert-card:hover .img-wrap img { opacity:1; transform:scale(1.05); }
+.card-tag { position:absolute; top:12px; left:12px; background:rgba(2,4,9,0.8); color:var(--cyan); font-size:0.6rem; padding:3px 8px; border:1px solid var(--border-bright); z-index: 2; }
+.card-footer { padding:1.2rem; display:flex; justify-content:space-between; align-items:center; }
+.cert-name { font-family:var(--font-display); font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-bottom: 2px; }
+.cert-sub { font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; }
+
+/* ── LIGHTBOX DASHBOARD ── */
+.lightbox {
+  position:fixed; inset:0; z-index:9999;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:0.4s;
+}
+.lightbox.open { opacity:1; pointer-events:all; }
+.lb-backdrop { position:absolute; inset:0; background:rgba(2,4,9,0.97); backdrop-filter:blur(15px); }
+
+.lb-container {
+  position:relative; width:94%; max-width:1150px;
+  background: #080e1a;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+  transform: scale(0.95); transition: 0.4s var(--ease-out);
+}
+.lightbox.open .lb-container { transform: scale(1); }
+
+.lb-close {
+  position:absolute; top:20px; right:20px; z-index:10;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); 
+  color:#fff; cursor:pointer; width: 35px; height: 35px; border-radius: 4px;
+}
+
+.lb-content-split { display:flex; min-height: 580px; }
+
+/* Left side: The Certificate Preview */
+.lb-view-side {
+  flex: 1.2; background: #04080f; 
+  display:flex; align-items:center; justify-content:center;
+  padding: 40px; position: relative;
+}
+.cert-frame {
+  position: relative; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+.cert-frame::before, .cert-frame::after {
+  content: ''; position: absolute; width: 30px; height: 30px;
+  border: 1px solid var(--text-muted); pointer-events: none; opacity: 0.5;
+}
+.cert-frame::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.cert-frame::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+.lb-img {
+  max-width: 100%; max-height: 480px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Right side: Credential Data */
+.lb-info-side {
+  flex: 1; padding: 45px;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  background: linear-gradient(135deg, #0b1220 0%, #070d18 100%);
+}
+
+.ledger-tag {
+  font-size: 0.6rem; letter-spacing: 3px; color: var(--teal);
+  text-transform: uppercase; margin-bottom: 1rem; display: block;
+}
+.lb-title { font-family: var(--font-display); font-size: 1.8rem; color: #fff; margin-bottom: 0.4rem; line-height: 1.2; }
+.lb-subtitle { color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+
+.meta-item { display: flex; gap: 1.2rem; margin-bottom: 1.4rem; }
+.meta-icon {
+  width: 38px; height: 38px; background: rgba(0,212,255,0.05);
+  border-radius: 4px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(0,212,255,0.15); color: var(--cyan);
+}
+.meta-text label { display: block; font-size: 0.55rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; margin-bottom: 2px; }
+.meta-text span { font-size: 0.85rem; font-weight: 600; color: #e2e8f0; }
+
+.skills-title { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; margin-top: 2rem; margin-bottom: 0.8rem; letter-spacing: 2px; }
+.skills-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+.skill-tag { 
+  background: rgba(0,255,204,0.05); border: 1px solid rgba(0,255,204,0.15);
+  color: var(--teal); font-size: 0.62rem; padding: 4px 10px; border-radius: 3px;
+}
+
+.signatories {
+  background: rgba(0,0,0,0.25); border-radius: 4px; padding: 15px; border: 1px solid rgba(255,255,255,0.03);
+}
+.sign-item { font-size: 0.7rem; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+.sign-item::before { content: '•'; color: var(--cyan); margin-right: 10px; }
+
+/* Bottom Nav Bar */
+.lb-nav-bar {
+  background: #04080f; border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 15px 40px; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-id-badge { background: rgba(255,255,255,0.05); font-size: 0.6rem; padding: 4px 10px; border-radius: 2px; color: var(--text-muted); margin-right: 15px; }
+.nav-current-name { font-size: 0.75rem; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
+
+.nav-controls { display: flex; align-items: center; gap: 12px; }
+.nav-btn {
+  background: #0b1220; border: 1px solid var(--border); color: var(--cyan);
+  width: 45px; height: 35px; cursor: pointer; transition: 0.2s; border-radius: 2px;
+}
+.nav-btn:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+.nav-counter { font-size: 0.75rem; color: var(--text-muted); min-width: 60px; text-align: center; }
+
+@media(max-width: 950px) {
+  .lightbox {
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 15px 0;
+  }
+  .lb-backdrop { position: fixed; }
+  .lb-content-split { flex-direction: column; min-height: 0; }
+  .lb-view-side { padding: 50px 20px 25px; min-height: auto; }
+  .lb-info-side { padding: 25px 20px; border-left: none; border-top: 1px solid rgba(255,255,255,0.05); }
+  .lb-container {
+    width: 94%;
+    margin: 0 auto;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+  .lb-img { max-height: none; width: 100%; height: auto; }
+  .lb-title { font-size: 1.4rem; }
+  .lb-nav-bar { flex-direction: column; gap: 15px; padding: 20px; text-align: center; }
+  .lb-close { top: 12px; right: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient-grid"></div>
+<canvas id="cert-canvas"></canvas>
+
+<nav>
+  <div class="nav-left">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Portfolio</a>
+    <div class="nav-logo">PAULINE.L</div>
+  </div>
+  <div class="nav-right" style="font-size:0.6rem; color:var(--text-muted); letter-spacing:2px;">SECURE LEDGER ACCESS</div>
+</nav>
+
+<div class="wrapper">
+  <div class="page-hero">
+    <div class="s-label" style="color:var(--cyan); font-size:0.65rem; letter-spacing:4px;">05 — VERIFIED CREDENTIALS</div>
+    <h1 class="page-title">Certificates &<br><span>Achievements.</span></h1>
+  </div>
+
+  <div id="certSections"></div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-backdrop" onclick="closeLightbox()"></div>
+  <div class="lb-container">
+    <button class="lb-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+    
+    <div class="lb-content-split">
+      <div class="lb-view-side">
+        <div class="cert-frame">
+          <img class="lb-img" id="lbImg" src="" alt="Certificate">
+        </div>
+      </div>
+
+      <div class="lb-info-side">
+        <span class="ledger-tag"><i class="fas fa-shield-alt"></i> Verified Credential Record</span>
+        <h2 class="lb-title" id="lbTitle">Certificate Title</h2>
+        <p class="lb-subtitle" id="lbType">Category Description</p>
+
+        <div class="meta-item">
+          <div class="meta-icon"><i class="fas fa-university"></i></div>
+          <div class="meta-text">
+            <label>Issuing Organization</label>
+            <span id="lbIssuer">Institution Name</span>
+          </div>
+        </div>
+
+        <div class="meta-item">
+          <div class="meta-icon"><i class="far fa-calendar-check"></i></div>
+          <div class="meta-text">
+            <label>Date Secured</label>
+            <span id="lbDate">Month DD, YYYY</span>
+          </div>
+        </div>
+
+        <div class="meta-item">
+          <div class="meta-icon"><i class="fas fa-fingerprint"></i></div>
+          <div class="meta-text">
+            <label>Validation Status</label>
+            <span style="color: var(--teal);"><i class="fas fa-check-circle"></i> Authenticated</span>
+          </div>
+        </div>
+
+        <div class="skills-title">Competencies & Skills</div>
+        <div class="skills-tags" id="lbSkills"></div>
+
+        <div class="skills-title">Authorized Signatories</div>
+        <div class="signatories" id="lbSignatories"></div>
+      </div>
+    </div>
+
+    <div class="lb-nav-bar">
+      <div>
+        <span class="nav-id-badge" id="lbBottomTag">INDEX 01</span>
+        <span class="nav-current-name" id="lbBottomTitle">Title</span>
+      </div>
+      <div class="nav-controls">
+        <button class="nav-btn" onclick="navigateLightbox(-1)"><i class="fas fa-chevron-left"></i></button>
+        <span class="nav-counter" id="lbCounter">1 / 9</span>
+        <button class="nav-btn" onclick="navigateLightbox(1)"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const certificates = [
+  // 1-4: TESDA COURSES
+  {
+    src: 'Ecert 1.png',
+    title: 'TESDA Module I - Introduction to Bookkeeping',
+    type: 'TESDA Course Certification 1',
+    issuer: 'TESDA - Technical Education and Skills Development Authority',
+    date: 'May 19, 2026',
+    skills: ['Understanding the Accounting Equation', 'Identification of Account Classifications', 'Application of Rules of Debits and Credits', 'Analyzing Business Transactions'],
+    signatories: ['TESDA Regional Assessment Center']
+  },
+  {
+    src: 'Ecert 2.png',
+    title: 'TESDA Module II - Journalizing Transactions',
+    type: 'TESDA Course Certification 2',
+    issuer: 'TESDA Authorized Center',
+    date: 'May 27, 2026',
+    skills: ['Prepare chart of accounts', 'Analyze business documents and transactions', 'Determine debit and credit accounts', 'Record transactions in the General Journal','Record transactions in Special Journals','Maintain journal entry accuracy and supporting documents'],
+    signatories: ['TESDA Regional Assessment Center']
+  },
+  {
+    src: 'Ecert 3.png',
+    title: 'TESDA Module III - Posting Transactions',
+    type: 'TESDA Course Certification 3',
+    issuer: 'TESDA Skills Development Center',
+    date: 'May 29, 2026',
+    skills: ['Open and maintain the General Ledger', 'Post journal entries from the General Journal to the General Ledger', 'Post journal entries from Special Journals to Subsidiary Ledgers (Accounts Receivable and Accounts Payable)', 'Verify posting accuracy using cross-referencing and folio numbers', 'Calculate and update running balances of individual accounts' , 'Prepare a Trial Balance from the ledger balances'],
+    signatories: ['TESDA Regional Assessment Center']
+  },
+  {
+    src: 'Ecert 4.png',
+    title: 'TESDA Module IV - Preparing Trial Balance',
+    type: 'TESDA Course Certification 4',
+    issuer: 'TESDA / National Training Institute',
+    date: 'June 1, 2026',
+    skills: ['Gather and extract ending account balances from the General Ledger', 'List accounts with debit balances in the left column', 'List accounts with credit balances in the right column','Total the debit and credit columns to ensure mathematical equality','Identify and locate errors if the Trial Balance does not balance','Prepare adjustments for unrecorded transactions, depreciation, and accruals','Formulate an Adjusted Trial Balance as a basis for financial statements'],
+    signatories: ['TESDA Regional Assessment Center']
+  },
+  // 5-9: COLLEGE WEBINARS
+  {
+    src: 'Ecert 5.png',
+    title: 'TESDA Module V - Preparing Financial Reports',
+    type: 'TESDA Course Certification 5',
+    issuer: 'TESDA / National Training Institute',
+    date: 'June 7, 2026',
+    skills: ['Preparing Financial Statements', 'Verifying Financial Data', 'Analyzing Financial Statements', 'Fundamentals of Notes to Financial Statements'],
+    signatories: ['TESDA Regional Assessment Center']
+  },
+  {
+    src: 'Ecert 6.png',
+    title: 'TESDA Module VI - Reviewing Internal Control System',
+    type: 'TESDA Course Certification 6',
+    issuer: 'TESDA / National Training Institute',
+    date: 'June 7, 2026',
+    skills: ['Components of Internal Control System', 'Fundamentals of Internal Control System', 'Checking Internal Control Policy Compliance Report', 'Preparing Policy Compliance Report'],
+    signatories: ['TESDA Regional Assessment Center']
+  },
+  {
+    src: 'Ecert 7.png',
+    title: 'CYBER SAFE LEARNING FOR EDUCATION PROJECT (CLEP)',
+    type: 'Achievement & Recognition',
+    issuer: 'University of Caloocan City - BSAIS',
+    date: 'September 9, 2022',
+    skills: ['Basic Cybersecurity (The "Human Firewall" Training)', 'Data Privacy (Crucial for Corporate Work)', 'Digital Literacy & Secure Collaboration'],
+    signatories: ['MARIA LOURDES AQUILIZAN [OIC Director IV/DICT-ILCDB]', 'KARL LEUNG [Chief Partnership and Strategy Officer / Go Philippines]', 'DICT', 'ILCDB', 'GOPHILIPPINES', 'Microsoft']
+  },
+  {
+    src: 'Ecert 8.png',
+    title: 'RELENTLESS: OUTLINING THE PARAMETER AND REACH THE POST',
+    type: 'Achievement & Recognition',
+    issuer: 'University of Caloocan City - BSAIS',
+    date: 'January 31, 2021.',
+    skills: ['Technical accounting competency standards', 'Professional employment strategies.'],
+    signatories: ['Remedios R. Santos, CPA, MBA [PICPA NMMC President]', "Jyzze Ozonia D.'Encabo [Regional Council President]"]
+  },
+  {
+    src: 'Ecert 9.JPG',
+    title: 'F.A.C.E (Fight, Aim, Conquer, Excel)',
+    type: 'Achievement & Recognition',
+    issuer: 'University of Caloocan City - BSAIS',
+    date: 'December 4, 2022',
+    skills: ['Financial Analyst\'s POV Webinar'],
+    signatories: ['BERNADETTE HOLANDA [Guest Speaker]', 'Zenith Camu, CPA, DPA, PhD (Adviser)']
+  },
+  {
+    src: 'QuickBooksOnlineCertification.jpg',
+    title: 'QuickBooks Online Accountant Certification',
+    type: 'Professional ProAdvisor Certification',
+    issuer: 'Intuit QuickBooks',
+    date: 'June 10, 2026',
+    skills: ['QuickBooks Online Accountant Setup & Navigation', 'Client Management & Books Review', 'Banking, Reconciliation & Transactions', 'Reporting & Financial Statement Preparation', 'Payroll, Sales Tax & Advanced Features'],
+    signatories: ['Amanda Newton [GTM Segment Lead, Accountant Channel – Rest of World Portfolio]', 'Intuit QuickBooks']
+  }
+];
+
+// Category assignment by index:
+//   0-5  → TESDA Modules I-VI
+//   6    → DICT Webinar (CLEP)
+//   7-8  → College Webinars
+//   9    → Intuit QuickBooks ProAdvisor
+const categoryFor = (idx) => {
+  if (idx <= 5) return 'tesda';
+  if (idx === 6) return 'dict';
+  if (idx === 9) return 'proadvisor';
+  return 'college';
+};
+const categoryLabels = {
+  proadvisor: { sub: 'INTUIT PROADVISOR', title: 'Professional ProAdvisor Certification', order: 1 },
+  tesda:      { sub: 'TESDA CERTIFIED',   title: 'TESDA Certificate of Completion',                  order: 2 },
+  dict:       { sub: 'DICT WEBINAR',      title: 'DICT Webinar',                          order: 3 },
+  college:    { sub: 'COLLEGE WEBINAR',   title: 'College Webinars',                      order: 4 },
+};
+
+const sectionsRoot = document.getElementById('certSections');
+let current = 0;
+
+// Group certificates by category while preserving original indices
+const groups = {};
+certificates.forEach((cert, idx) => {
+  const cat = categoryFor(idx);
+  (groups[cat] = groups[cat] || []).push({ cert, idx });
+});
+
+// Render sections in defined order
+Object.keys(groups)
+  .sort((a, b) => categoryLabels[a].order - categoryLabels[b].order)
+  .forEach((cat) => {
+    const items = groups[cat];
+    const section = document.createElement('section');
+    section.className = 'cert-section';
+    section.innerHTML = `
+      <div class="cert-section-header">
+        <span class="sh-bar"></span>
+        <span class="sh-title">${categoryLabels[cat].title}</span>
+        <span class="sh-count">${items.length.toString().padStart(2,'0')} ${items.length === 1 ? 'Credential' : 'Credentials'}</span>
+        <span class="sh-line"></span>
+      </div>
+      <div class="cert-grid"></div>
+    `;
+    const grid = section.querySelector('.cert-grid');
+    items.forEach(({ cert, idx }) => {
+      const card = document.createElement('div');
+      card.className = 'cert-card';
+      card.onclick = () => openLightbox(idx);
+      card.innerHTML = `
+        <div class="img-wrap">
+          <img src="${cert.src}" alt="${cert.title}" loading="lazy">
+          <div class="card-tag">REF-${(idx+1).toString().padStart(2, '0')}</div>
+        </div>
+        <div class="card-footer">
+          <div>
+            <div class="cert-name">${cert.title}</div>
+            <div class="cert-sub">${categoryLabels[cat].sub}</div>
+          </div>
+          <div style="color:var(--cyan); font-size:0.8rem;"><i class="fas fa-plus"></i></div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    sectionsRoot.appendChild(section);
+  });
+
+function openLightbox(index) {
+  current = index;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function navigateLightbox(dir) {
+  current = (current + dir + certificates.length) % certificates.length;
+  updateLightbox();
+}
+
+function updateLightbox() {
+  const cert = certificates[current];
+  document.getElementById('lbImg').src = cert.src;
+  document.getElementById('lbTitle').textContent = cert.title;
+  document.getElementById('lbType').textContent = cert.type;
+  document.getElementById('lbIssuer').textContent = cert.issuer;
+  document.getElementById('lbDate').textContent = cert.date;
+  document.getElementById('lbBottomTitle').textContent = cert.title;
+  document.getElementById('lbBottomTag').textContent = `INDEX ${(current+1).toString().padStart(2, '0')}`;
+  document.getElementById('lbCounter').textContent = `${current + 1} / ${certificates.length}`;
+
+  const skillContainer = document.getElementById('lbSkills');
+  skillContainer.innerHTML = '';
+  cert.skills.forEach(s => {
+    const span = document.createElement('span');
+    span.className = 'skill-tag';
+    span.textContent = s;
+    skillContainer.appendChild(span);
+  });
+
+  const signContainer = document.getElementById('lbSignatories');
+  signContainer.innerHTML = '';
+  cert.signatories.forEach(s => {
+    const span = document.createElement('span');
+    span.className = 'sign-item';
+    span.textContent = s;
+    signContainer.appendChild(span);
+  });
+}
+
+// Particle Background Fix
+const canvas = document.getElementById('cert-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+// Pre-define particle configuration array to eliminate blinking / flickering bugs
+const particles = Array.from({ length: 40 }, () => ({
+  x: Math.random(),
+  y: Math.random()
+}));
+
+function loop() {
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = 'rgba(0, 212, 255, 0.15)';
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x * W, p.y * H, 1, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>

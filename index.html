@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pauline Lucena — Accounting & Finance VA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg-void: #020409;
+  --bg-surface: #070d18;
+  --bg-card: #0b1220;
+  --bg-card-hover: #0f1a2e;
+  --cyan: #00d4ff;
+  --cyan-dim: #00a0c0;
+  --cyan-glow: rgba(0,212,255,0.12);
+  --teal: #00ffcc;
+  --teal-dim: rgba(0,255,204,0.6);
+  --text-primary: #eef6fa;
+  --text-secondary: #9fb6c4;
+  --text-muted: #708594;
+  --border: rgba(0,212,255,0.07);
+  --border-bright: rgba(0,212,255,0.22);
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* mono reserved for UI/labels */
+nav, .s-label, .nav-cta, .btn-primary, .btn-ghost, .form-submit,
+.form-label, .hero-tag, .hero-type-wrap, .stat-lbl, .cl-label,
+.tool-chip-sub, .svc-icon + .svc-name, .wf-step, footer { font-family: var(--font-mono); }
+.s-title, .hero-headline, .stat-val, .testimonial blockquote + figcaption { font-family: var(--font-display); }
+
+a { text-decoration: none; color: inherit; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 4px; }
+
+/* scanline */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);
+  pointer-events:none; z-index:9998;
+}
+
+/* ── AMBIENT ── */
+.ambient-grid {
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events:none; z-index:0;
+}
+.ambient-glow {
+  position:fixed; border-radius:50%;
+  filter:blur(130px); pointer-events:none; z-index:0; opacity:0.05;
+}
+.ambient-glow.tl { width:500px;height:500px;top:-150px;left:-150px;background:var(--cyan); }
+.ambient-glow.br { width:400px;height:400px;bottom:-120px;right:-120px;background:var(--teal); }
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  padding:1.2rem 3rem;
+  display:flex; justify-content:space-between; align-items:center;
+  background:rgba(2,4,9,0.75);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  animation: slideDown 0.8s var(--ease-out) both;
+}
+@keyframes slideDown { from { transform:translateY(-100%); opacity:0; } }
+
+.nav-logo {
+  font-family:var(--font-display);
+  font-size:0.95rem; font-weight:800;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--cyan);
+  display:flex; align-items:center; gap:0.6rem;
+}
+.nav-dot { width:7px;height:7px;background:var(--teal);border-radius:50%;animation:blink 2s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.15;} }
+
+.nav-links { display:flex; list-style:none; gap:2.5rem; align-items:center; }
+.nav-links a {
+  font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-secondary); transition:color 0.3s; position:relative;
+}
+.nav-links a:hover { color:var(--cyan); }
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0;
+  width:0; height:1px; background:var(--cyan);
+  transition:width 0.3s var(--ease-out);
+}
+.nav-links a:hover::after { width:100%; }
+
+.nav-cta {
+  font-family:var(--font-mono); font-size:0.7rem;
+  letter-spacing:2px; text-transform:uppercase;
+  background:transparent; border:1px solid var(--border-bright);
+  color:var(--cyan); padding:0.55rem 1.3rem; border-radius:2px;
+  cursor:pointer; transition:all 0.3s;
+}
+.nav-cta:hover { background:var(--cyan); color:var(--bg-void); box-shadow:0 0 20px var(--cyan-glow); }
+
+/* ── HERO ── */
+.hero {
+  position:relative; min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+#hero-canvas { position:absolute; inset:0; width:100%; height:100%; }
+
+.hero-content {
+  position:relative; z-index:10;
+  text-align:center; padding:2rem; max-width:860px;
+}
+
+.hero-tag {
+  display:inline-flex; align-items:center; gap:0.8rem;
+  font-size:0.68rem; letter-spacing:4px; text-transform:uppercase;
+  color:var(--cyan); border:1px solid var(--border-bright);
+  padding:0.45rem 1.4rem; border-radius:2px; margin-bottom:2.5rem;
+  background:rgba(0,212,255,0.04);
+  animation: fadeUp 0.8s 0.5s var(--ease-out) both;
+}
+.tag-line { width:18px; height:1px; background:var(--cyan); }
+
+.hero-headline {
+  font-family:var(--font-display);
+  font-size:clamp(2.8rem, 8vw, 6rem);
+  font-weight:800; line-height:0.95;
+  letter-spacing:-2px; margin-bottom:1.8rem;
+  animation: fadeUp 0.9s 0.7s var(--ease-out) both;
+}
+.hero-headline .l1 { display:block; color:var(--text-primary); }
+.hero-headline .l2 {
+  display:block;
+  background:linear-gradient(90deg, var(--cyan), var(--teal));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+.hero-sub {
+  font-size:1.0625rem; color:var(--text-secondary); line-height:1.75;
+  max-width:560px; margin:0 auto 1.2rem;
+  animation: fadeUp 0.8s 0.9s var(--ease-out) both;
+}
+
+.hero-type-wrap {
+  font-size:0.88rem; color:var(--text-muted);
+  margin-bottom:3rem; letter-spacing:1px;
+  animation: fadeUp 0.8s 1s var(--ease-out) both;
+}
+#hero-typewriter { color:var(--teal); }
+.cursor-blink { animation:cursorBlink 0.8s step-end infinite; }
+@keyframes cursorBlink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+.hero-cta-row {
+  display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap;
+  animation: fadeUp 0.8s 1.1s var(--ease-out) both;
+}
+.btn-primary {
+  font-family:var(--font-mono); font-size:0.82rem;
+  letter-spacing:2px; text-transform:uppercase;
+  background:var(--cyan); color:var(--bg-void);
+  padding:1.05rem 2.4rem; box-shadow:0 8px 28px rgba(0,212,255,0.22); border-radius:2px; font-weight:700;
+  transition:all 0.3s; border:1px solid var(--cyan);
+}
+.btn-primary:hover { background:transparent; color:var(--cyan); box-shadow:0 0 30px rgba(0,212,255,0.25); }
+.btn-ghost {
+  font-family:var(--font-mono); font-size:0.82rem;
+  letter-spacing:2px; text-transform:uppercase;
+  background:transparent; color:var(--text-primary);
+  padding:1.05rem 2.4rem; border-radius:2px;
+  border:1px solid rgba(0,212,255,0.35); transition:all 0.3s;
+}
+.btn-ghost:hover { border-color:var(--border-bright); color:var(--cyan); }
+
+.hero-scroll {
+  position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+  font-size:0.62rem; letter-spacing:3px; color:var(--text-muted); text-transform:uppercase;
+  animation: fadeIn 1s 1.6s both;
+}
+.scroll-line { width:1px; height:40px; background:linear-gradient(to bottom, var(--cyan), transparent); animation:scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+/* ── SECTIONS ── */
+.full-w { max-width:100%; }
+.inner { max-width:1200px; margin:0 auto; padding:0 2rem; }
+
+.s-pad { padding:8rem 0; }
+.s-border { border-top:1px solid var(--border); }
+
+.s-label {
+  font-size:0.66rem; letter-spacing:4px; text-transform:uppercase;
+  color:var(--cyan); margin-bottom:1rem;
+  display:flex; align-items:center; gap:1rem;
+}
+.s-label::before { content:''; display:inline-block; width:28px; height:1px; background:var(--cyan); }
+
+.s-title {
+  font-family:var(--font-display);
+  font-size:clamp(1.9rem,4vw,3.2rem); font-weight:800;
+  color:var(--text-primary); margin-bottom:0.8rem; letter-spacing:-1px;
+}
+.s-sub {
+  font-size:0.88rem; color:var(--text-secondary);
+  max-width:480px; line-height:1.9; margin-bottom:4.5rem;
+}
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(38px); transition:opacity 0.85s var(--ease-out), transform 0.85s var(--ease-out); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+.d1{transition-delay:0.1s;} .d2{transition-delay:0.2s;} .d3{transition-delay:0.3s;} .d4{transition-delay:0.4s;}
+
+/* ── ABOUT ── */
+#about { background:linear-gradient(180deg, var(--bg-void) 0%, var(--bg-surface) 100%); }
+
+.about-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5rem; align-items:start;
+}
+
+.about-bio p {
+  font-size:1.0625rem; color:var(--text-secondary);
+  line-height:1.8; margin-bottom:1.4rem;
+}
+.about-bio p strong { color:var(--text-primary); }
+
+.about-quote {
+  border-left:2px solid var(--cyan);
+  padding:1rem 1.5rem;
+  background:rgba(0,212,255,0.03);
+  border-radius:0 4px 4px 0;
+  font-size:0.88rem; color:var(--text-secondary);
+  line-height:1.9; margin:1.5rem 0;
+  font-style:italic;
+}
+.about-quote strong { color:var(--cyan); font-style:normal; }
+
+.about-stats {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1rem; margin-top:2rem;
+}
+.stat-box {
+  border:1px solid var(--border); background:var(--bg-card);
+  padding:1.4rem; border-radius:4px; text-align:center;
+  transition:border-color 0.3s, box-shadow 0.3s;
+}
+.stat-box:hover { border-color:var(--border-bright); box-shadow:0 0 18px var(--cyan-glow); }
+.stat-val {
+  font-family:var(--font-display);
+  font-size:2rem; font-weight:800; color:var(--cyan); line-height:1; margin-bottom:0.3rem;
+}
+.stat-lbl { font-size:0.72rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); }
+
+/* ── SERVICES ── */
+#services { background:var(--bg-void); }
+
+.services-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+
+.svc-card {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:4px; padding:2.2rem;
+  position:relative; overflow:hidden;
+  transition:all 0.4s var(--ease-out);
+}
+.svc-card::before {
+  content:''; position:absolute; top:0;left:0;right:0; height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--teal));
+  transform:scaleX(0); transform-origin:left;
+  transition:transform 0.4s var(--ease-out);
+}
+.svc-card:hover { border-color:var(--border-bright); background:var(--bg-card-hover); transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 28px var(--cyan-glow); }
+.svc-card:hover::before { transform:scaleX(1); }
+
+.svc-icon { font-size:1.4rem; color:var(--cyan); margin-bottom:1.2rem; display:block; }
+.svc-name {
+  font-family:var(--font-display); font-size:1rem; font-weight:700;
+  color:var(--text-primary); margin-bottom:1.5rem;
+  padding-bottom:1rem; border-bottom:1px solid var(--border);
+}
+.svc-list { list-style:none; display:flex; flex-direction:column; gap:0.7rem; }
+.svc-item {
+  display:flex; align-items:flex-start; gap:0.7rem;
+  font-size:0.9rem; color:var(--text-secondary); line-height:1.5;
+  transition:color 0.25s, transform 0.25s;
+}
+.svc-item:hover { color:var(--text-primary); transform:translateX(4px); }
+.svc-item i { color:var(--cyan); font-size:0.7rem; margin-top:0.35rem; flex-shrink:0; }
+
+/* ── TOOLS ── */
+#tools { background:var(--bg-surface); }
+
+.tools-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:1rem; margin-bottom:4rem;
+}
+.tool-chip {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:4px; padding:1rem; text-align:center;
+  transition:all 0.3s; cursor:default;
+}
+.tool-chip:hover { border-color:var(--border-bright); background:var(--bg-card-hover); transform:translateY(-3px); box-shadow:0 0 18px var(--cyan-glow); }
+.tool-chip-name { font-size:0.8rem; font-weight:500; color:var(--text-primary); display:block; margin-bottom:0.25rem; }
+.tool-chip-sub { font-size:0.68rem; color:var(--text-muted); letter-spacing:1px; text-transform:uppercase; }
+
+/* ── CONTACT ── */
+#contact { background:var(--bg-void); position:relative; overflow:hidden; }
+
+.contact-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:6rem; align-items:start;
+}
+
+.contact-info p {
+  font-size:0.88rem; color:var(--text-secondary);
+  line-height:2; margin-bottom:2.5rem;
+}
+.contact-links { display:flex; flex-direction:column; gap:0.9rem; }
+.contact-link {
+  display:flex; align-items:center; gap:1.2rem;
+  padding:1.1rem 1.4rem;
+  border:1px solid var(--border); border-radius:4px;
+  background:var(--bg-card); transition:all 0.3s var(--ease-out);
+  color:var(--text-secondary); font-size:0.82rem;
+}
+.contact-link:hover { border-color:var(--border-bright); background:var(--bg-card-hover); color:var(--cyan); transform:translateX(6px); box-shadow:0 0 18px var(--cyan-glow); }
+.contact-link i { font-size:1rem; width:1.4rem; text-align:center; color:var(--cyan); }
+.cl-label { font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); display:block; margin-bottom:0.1rem; }
+.cl-val { font-size:0.84rem; }
+
+.contact-form { display:flex; flex-direction:column; gap:1rem; }
+.form-group { display:flex; flex-direction:column; gap:0.35rem; }
+.form-label { font-size:0.82rem; letter-spacing:0.3px; text-transform:none; color:var(--text-secondary); font-weight:500; font-family:var(--font-body); }
+.form-input, .form-textarea, .form-select {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:4px; padding:1rem 1.15rem;
+  font-family:var(--font-body); font-size:1rem; color:var(--text-primary);
+  outline:none; transition:all 0.3s; resize:vertical;
+}
+.form-input:focus,.form-textarea:focus { border-color:var(--border-bright); box-shadow:0 0 14px var(--cyan-glow); background:var(--bg-card-hover); }
+.form-input::placeholder,.form-textarea::placeholder { color:var(--text-muted); }
+.form-textarea { min-height:110px; }
+.form-submit {
+  font-family:var(--font-mono); font-size:0.85rem;
+  letter-spacing:2px; text-transform:uppercase;
+  background:var(--cyan); color:var(--bg-void);
+  border:none; padding:1.1rem 2rem; border-radius:4px;
+  font-weight:700; cursor:pointer; transition:all 0.3s;
+  align-self:stretch; width:100%;
+  box-shadow:0 8px 28px rgba(0,212,255,0.22);
+}
+.form-submit-note { font-size:0.72rem; color:var(--text-muted); margin-top:0.6rem; letter-spacing:1px; text-transform:uppercase; text-align:center; font-family:var(--font-mono); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media(max-width:640px){ .form-row{ grid-template-columns:1fr; } }
+.form-submit:hover { background:var(--teal); box-shadow:0 0 28px rgba(0,255,204,0.25); }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid var(--border); padding:2.2rem 3rem;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:0.68rem; letter-spacing:1px; color:var(--text-muted);
+}
+
+
+/* ── SECTION SEAM ── */
+section, [id], .full-w { }
+#about, #services, #workflow, #tools, #contact, #proof { position:relative; }
+#about::before, #services::before, #workflow::before, #tools::before, #contact::before, #proof::before {
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:70%; height:140px; pointer-events:none;
+  background:radial-gradient(ellipse at top, rgba(0,212,255,0.07), transparent 70%);
+}
+#about > .inner, #services > .inner, #workflow > .inner,
+#tools > .inner, #contact > .inner, #proof > .inner { position:relative; z-index:1; }
+
+/* Brighter divider line */
+.s-border { border-top:1px solid rgba(0,212,255,0.18) !important; }
+
+/* Stronger surface tint */
+#tools { background:#0a1422 !important; }
+#about { background:linear-gradient(180deg, var(--bg-void) 0%, #0a1422 100%) !important; }
+
+/* ── HERO PHOTO HALO ── */
+.hero-photo-halo {
+  position:relative;
+}
+.hero-photo-halo::before {
+  content:''; position:absolute; inset:-14px; border-radius:20px;
+  background:conic-gradient(from 140deg, var(--cyan), var(--teal), transparent 55%, var(--cyan));
+  filter:blur(14px); opacity:0.55; z-index:0;
+}
+
+/* ── TESTIMONIALS ── */
+#proof { background:#05101c; }
+.testimonial-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+.testimonial {
+  border:1px solid var(--border); background:var(--bg-card);
+  padding:2rem 1.8rem 1.5rem; border-radius:6px; position:relative;
+  transition:border-color 0.3s, box-shadow 0.3s;
+}
+.testimonial:hover { border-color:var(--border-bright); box-shadow:0 0 24px var(--cyan-glow); }
+.testimonial::before { content:none; }
+
+.testimonial blockquote { color:var(--text-primary); font-size:1rem; line-height:1.7; margin-bottom:1rem; font-style:italic; }
+.testimonial figcaption { font-size:0.72rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); font-family:var(--font-mono); }
+
+/* ── AVAILABILITY BADGE ── */
+.availability { display:inline-flex; align-items:center; gap:0.5rem; margin-top:1.4rem; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; color:var(--teal); font-family:var(--font-mono); }
+.availability::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--teal); box-shadow:0 0 12px var(--teal); animation:blink 2s infinite; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .about-grid { grid-template-columns:1fr; gap:3rem; }
+  .services-grid { grid-template-columns:1fr; }
+  .contact-grid { grid-template-columns:1fr; gap:3rem; }
+}
+
+/* ── HAMBURGER (mobile) ── */
+.nav-burger {
+  display:none;
+  background:transparent; border:1px solid var(--border-bright);
+  color:var(--cyan); width:42px; height:42px; border-radius:4px;
+  cursor:pointer; align-items:center; justify-content:center;
+  font-size:1.1rem; transition:all 0.3s;
+}
+.nav-burger:hover { background:var(--cyan); color:var(--bg-void); }
+
+.mobile-menu {
+  position:fixed; top:0; right:0; bottom:0;
+  width:78%; max-width:320px;
+  background:rgba(2,4,9,0.98);
+  backdrop-filter:blur(20px);
+  border-left:1px solid var(--border-bright);
+  z-index:1001;
+  transform:translateX(100%);
+  transition:transform 0.4s var(--ease-out);
+  display:flex; flex-direction:column;
+  padding:5rem 2rem 2rem;
+}
+.mobile-menu.open { transform:translateX(0); }
+.mobile-menu a {
+  display:block;
+  padding:1rem 0;
+  font-size:0.8rem; letter-spacing:3px; text-transform:uppercase;
+  color:var(--text-secondary);
+  border-bottom:1px solid var(--border);
+  transition:color 0.3s, padding-left 0.3s;
+}
+.mobile-menu a:hover { color:var(--cyan); padding-left:0.5rem; }
+.mobile-menu .nav-cta {
+  margin-top:1.5rem; border:1px solid var(--border-bright);
+  padding:0.9rem 1.2rem; text-align:center; color:var(--cyan);
+  border-radius:4px;
+}
+.mobile-menu-close {
+  position:absolute; top:1rem; right:1rem;
+  background:transparent; border:none; color:var(--cyan);
+  font-size:1.4rem; cursor:pointer; width:42px; height:42px;
+}
+.mobile-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.6);
+  z-index:1000; opacity:0; pointer-events:none;
+  transition:opacity 0.3s;
+}
+.mobile-overlay.open { opacity:1; pointer-events:auto; }
+
+@media(max-width:768px){
+  body { padding:0; }
+  body::after { display:none; }
+  nav { padding:0.9rem 2rem; }
+  .nav-links { display:none; }
+  .nav-burger { display:inline-flex; }
+  .inner { padding:0 2rem; }
+  .s-title { overflow-wrap:break-word; word-break:break-word; }
+  .s-sub { max-width:100%; }
+  .s-pad { padding:4rem 0; }
+  .s-sub { margin-bottom:2.5rem; }
+  .hero { min-height:calc(100vh - 60px); }
+  .hero-content { padding:1.5rem 1.5rem; }
+  .hero-headline { font-size:2.4rem; margin-bottom:1.2rem; letter-spacing:-1px; }
+  .hero-tag { margin-bottom:1.8rem; font-size:0.6rem; padding:0.4rem 1rem; }
+  .hero-sub { font-size:0.85rem; line-height:1.7; }
+  .hero-type-wrap { margin-bottom:2rem; font-size:0.78rem; }
+  .hero-cta-row { gap:0.8rem; }
+  .btn-primary, .btn-ghost { padding:0.8rem 1.5rem; font-size:0.7rem; }
+  .s-title { margin-bottom:0.6rem; }
+  .svc-card { padding:1.6rem 1.4rem; }
+  .about-stats { grid-template-columns:repeat(3,1fr); gap:0.6rem; }
+  .stat-box { padding:1rem 0.6rem; }
+  .stat-val { font-size:1.5rem; }
+  .form-input, .form-textarea, .form-select { font-size:16px; }
+  .nav-burger, .mobile-menu-close { width:48px; height:48px; }
+  .contact-link { min-height:56px; }
+  .hero-headline { letter-spacing:-0.5px; }
+  .tools-grid { grid-template-columns:repeat(3,1fr); gap:0.7rem; }
+  .contact-grid { gap:2.5rem; }
+  .pricing-grid { grid-template-columns:1fr; max-width:100%; }
+  .result-before-after { grid-template-columns:1fr; gap:0.8rem; }
+  .contact-link { padding:0.95rem 1.1rem; }
+  footer { flex-direction:column; gap:0.8rem; text-align:center; padding:1.8rem 2rem; }
+}
+@media(max-width:480px){
+  body { padding:0; }
+  nav { padding:0.8rem 1.5rem; }
+  .inner { padding:0 1.5rem; }
+  .s-pad { padding:3.5rem 0; }
+  .hero-content { padding:1.25rem 1.25rem; }
+  .hero-headline { font-size:2rem; }
+  .hero-sub { font-size:0.8rem; }
+  .hero-cta-row { flex-direction:column; width:100%; }
+  .hero-cta-row a { width:100%; text-align:center; }
+  .about-stats { grid-template-columns:repeat(3,1fr); gap:0.5rem; }
+  .stat-box { padding:0.9rem 0.4rem; }
+  .stat-val { font-size:1.25rem; }
+  .stat-lbl { font-size:0.6rem; letter-spacing:1px; }
+  .tools-grid { grid-template-columns:repeat(2,1fr); }
+  .svc-card { padding:1.4rem 1.2rem; }
+  footer { padding:1.5rem 1.5rem; }
+}
+
+/* ── MOBILE EDGE PADDING FIX (≤768px) ──
+   Consistent 20–24px breathing room on small screens.
+   Desktop layout is untouched. */
+@media (max-width: 768px) {
+  :root { --mobile-gutter: 22px; }
+
+  /* Stop horizontal scroll from any rogue overflow */
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body { padding: 0; }
+
+  /* Apply the gutter to every top-level section wrapper
+     (these hold the inline-styled backgrounds, so the bg
+     still goes edge-to-edge while content gets padding). */
+  #about > .inner,
+  #services > .inner,
+  #tools > .inner,
+  #proof > .inner,
+  #contact > .inner,
+  #workflow .wf-inner,
+  .hero .inner,
+  .hero-content {
+    padding-left: var(--mobile-gutter) !important;
+    padding-right: var(--mobile-gutter) !important;
+    max-width: 100%;
+  }
+
+  /* Generic .inner fallback */
+  .inner { padding-left: var(--mobile-gutter); padding-right: var(--mobile-gutter); }
+
+  /* Section blocks with their own horizontal padding */
+  #workflow { padding-left: var(--mobile-gutter) !important; padding-right: var(--mobile-gutter) !important; }
+  nav       { padding-left: var(--mobile-gutter) !important; padding-right: var(--mobile-gutter) !important; }
+  footer    { padding-left: var(--mobile-gutter) !important; padding-right: var(--mobile-gutter) !important; }
+
+  /* Text & cards: never let them push past the gutter */
+  .s-title, .s-sub, .s-label,
+  .about-bio, .about-bio p, .about-quote,
+  .wf-title, .wf-sub, .hero-headline, .hero-sub {
+    max-width: 100%;
+  }
+
+  /* Prevent long words / URLs from forcing overflow */
+  p, h1, h2, h3, h4, h5, blockquote, li, a {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  img, video, iframe, svg { max-width: 100%; height: auto; }
+
+  /* Safety net: no child of body should exceed viewport width */
+  body * { max-width: 100vw; }
+}
+
+@media (max-width: 480px) {
+  :root { --mobile-gutter: 20px; }
+}
+
+/* ── DESKTOP-SITE-ON-MOBILE FIX ──
+   When a phone requests the "Desktop site" the viewport reports
+   ~980–1200px so the 768px media query never fires, and content
+   slams against the screen edge. Detect touch/coarse pointers
+   (true mobile hardware) and apply the same gutter regardless
+   of reported width. Real desktops have fine pointers + hover,
+   so this never triggers there. */
+@media (hover: none) and (pointer: coarse) {
+  :root { --mobile-gutter: 22px; }
+
+  html, body { overflow-x: hidden; max-width: 100%; }
+
+  #about > .inner,
+  #services > .inner,
+  #tools > .inner,
+  #proof > .inner,
+  #contact > .inner,
+  #workflow .wf-inner,
+  .hero .inner,
+  .hero-content,
+  .inner {
+    padding-left: var(--mobile-gutter) !important;
+    padding-right: var(--mobile-gutter) !important;
+    max-width: 100%;
+  }
+
+  #workflow,
+  nav,
+  footer {
+    padding-left: var(--mobile-gutter) !important;
+    padding-right: var(--mobile-gutter) !important;
+  }
+
+  .s-title, .s-sub, .s-label,
+  .about-bio, .about-bio p, .about-quote,
+  .wf-title, .wf-sub, .hero-headline, .hero-sub {
+    max-width: 100%;
+  }
+
+  p, h1, h2, h3, h4, h5, blockquote, li, a {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  img, video, iframe, svg { max-width: 100%; height: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient-grid"></div>
+<div class="ambient-glow tl"></div>
+<div class="ambient-glow br"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo" aria-label="Back to top"><div class="nav-dot"></div>PAULINE.L</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Skills</a></li>
+    <li><a href="#workflow">Process</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="Certificates.html" target="_blank">Certificates</a></li>
+    <li><a href="#contact" class="nav-cta">Hire Me →</a></li>
+  </ul>
+  <button class="nav-burger" id="navBurger" aria-label="Open menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<aside class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <button class="mobile-menu-close" id="mobileClose" aria-label="Close menu">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+  <a href="#about" data-close>About</a>
+  <a href="#services" data-close>Skills</a>
+  <a href="#workflow" data-close>Process</a>
+  <a href="#tools" data-close>Tools</a>
+  <a href="#experience" data-close>Experience</a>
+  <a href="Certificates.html" target="_blank" data-close>Certificates</a>
+  <a href="#contact" class="nav-cta" data-close>Hire Me →</a>
+</aside>
+
+<script>
+(function(){
+  var burger = document.getElementById('navBurger');
+  var menu = document.getElementById('mobileMenu');
+  var overlay = document.getElementById('mobileOverlay');
+  var closeBtn = document.getElementById('mobileClose');
+  function open(){ menu.classList.add('open'); overlay.classList.add('open'); menu.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function close(){ menu.classList.remove('open'); overlay.classList.remove('open'); menu.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  burger && burger.addEventListener('click', open);
+  closeBtn && closeBtn.addEventListener('click', close);
+  overlay && overlay.addEventListener('click', close);
+  menu && menu.querySelectorAll('[data-close]').forEach(function(a){ a.addEventListener('click', close); });
+})();
+</script>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <div class="tag-line"></div>
+      Accounting & Finance Virtual Assistant
+      <div class="tag-line"></div>
+    </div>
+    <h1 class="hero-headline">
+      <span class="l1">READY TO</span>
+      <span class="l2">DELIVER.</span>
+    </h1>
+    <p class="hero-sub">I'm Pauline — an Accounting Analyst turned VA with 3+ years of hands-on experience in bookkeeping, reconciliation, AP/AR, and financial reporting. I bring corporate-level precision to remote work.</p>
+    <div class="hero-type-wrap">
+      &gt; <span id="hero-typewriter"></span><span class="cursor-blink">_</span>
+    </div>
+    <div class="hero-cta-row">
+      <a href="Pauline_Lucena_Resume.pdf" download class="btn-primary"><i class="fa-solid fa-download" style="margin-right:0.5rem;"></i>Download Resume</a>
+      <a href="#contact" class="btn-ghost">Get In Touch →</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<div id="about" class="full-w s-border" style="background:linear-gradient(180deg,var(--bg-void) 0%,var(--bg-surface) 100%);">
+<div class="inner s-pad">
+  <div class="s-label reveal">01 — About Me</div>
+  <h2 class="s-title reveal">Detail-Driven.<br>Results-Oriented.</h2>
+  <p class="s-sub reveal">A corporate Accounting Analyst with 3+ years of experience, now bringing that same standard of precision and reliability to remote VA work.</p>
+
+  
+  <!-- PROFILE PHOTO -->
+  <div class="reveal" style="display:flex;justify-content:center;margin-bottom:3.5rem;">
+    <div class="hero-photo-halo" style="position:relative;display:inline-block;">
+      <div style="width:240px;height:280px;border-radius:16px;overflow:hidden;border:1px solid var(--border-bright);background:var(--bg-card);box-shadow:0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,212,255,0.2);">
+        <img src="Formalattire.png" style="width:100%;height:100%;object-fit:cover;" alt="Pauline Lucena">
+      </div>
+      <div style="position:absolute;inset:-4px;border-radius:18px;border:1px solid rgba(0,212,255,0.25);animation:portraitRing 3s ease-in-out infinite alternate;pointer-events:none;"></div>
+      <div style="position:absolute;bottom:8px;right:8px;width:14px;height:14px;background:var(--teal);border-radius:50%;border:2px solid var(--bg-void);animation:blink 2s ease-in-out infinite;"></div>
+    </div>
+  </div>
+<div class="about-grid">
+    <div class="about-bio reveal">
+      <p>I spent 3+ years as an <strong>Accounting Analyst</strong> in a corporate setting, handling bank reconciliations, AP/AR processing, payroll support, and monthly financial reporting across high-volume transaction environments.</p>
+      <p>I'm now transitioning into remote VA work — bringing the same discipline, accuracy, and accountability I built in corporate accounting to a fast-paced, distributed team. I know how to operate independently, meet deadlines without follow-up, and keep financial records clean under pressure.</p>
+      <div class="about-quote">
+        <strong>What I bring to a team:</strong><br>
+        Zero-error reconciliation habits, strong working knowledge of NetSuite, QuickBooks, and Excel, and a work ethic shaped by corporate close cycles — where accuracy isn't optional.
+      </div>
+      <p>I'm looking for a role where I can contribute meaningfully from day one — no ramp-up theater, just reliable execution.</p>
+      <div class="about-stats">
+        <div class="stat-box">
+          <div class="stat-val" data-target="3">3+</div>
+          <div class="stat-lbl">Yrs Experience</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" data-target="100">100%</div>
+          <div class="stat-lbl">% Reconciliation Accuracy</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" data-target="15">15+</div>
+          <div class="stat-lbl">Tools Mastered</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal d2" style="display:flex;flex-direction:column;gap:1.2rem;">
+      <!-- Skill highlight cards -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1.8rem;transition:all 0.3s;" onmouseover="this.style.borderColor='var(--border-bright)';this.style.boxShadow='0 0 18px var(--cyan-glow)';" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none';">
+        <div style="color:var(--cyan);font-size:1.1rem;margin-bottom:0.8rem;"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+        <div style="font-family:var(--font-display);font-weight:700;color:var(--text-primary);margin-bottom:0.5rem;">Financial Reporting</div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.8;">Accurate, structured reports delivered on time. From basic P&L to expense summaries — formatted and ready for review.</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1.8rem;transition:all 0.3s;" onmouseover="this.style.borderColor='var(--border-bright)';this.style.boxShadow='0 0 18px var(--cyan-glow)';" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none';">
+        <div style="color:var(--cyan);font-size:1.1rem;margin-bottom:0.8rem;"><i class="fa-solid fa-arrows-rotate"></i></div>
+        <div style="font-family:var(--font-display);font-weight:700;color:var(--text-primary);margin-bottom:0.5rem;">Bank Reconciliation</div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.8;">Every transaction matched, every discrepancy caught. Clean books you can actually trust — month after month.</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1.8rem;transition:all 0.3s;" onmouseover="this.style.borderColor='var(--border-bright)';this.style.boxShadow='0 0 18px var(--cyan-glow)';" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none';">
+        <div style="color:var(--cyan);font-size:1.1rem;margin-bottom:0.8rem;"><i class="fa-solid fa-inbox"></i></div>
+        <div style="font-family:var(--font-display);font-weight:700;color:var(--text-primary);margin-bottom:0.5rem;">Admin & Communications</div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.8;">Email management, calendar coordination, client follow-ups, and document organization — handled professionally.</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1.8rem;transition:all 0.3s;" onmouseover="this.style.borderColor='var(--border-bright)';this.style.boxShadow='0 0 18px var(--cyan-glow)';" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none';">
+        <div style="color:var(--cyan);font-size:1.1rem;margin-bottom:0.8rem;"><i class="fa-solid fa-bullseye"></i></div>
+        <div style="font-family:var(--font-display);font-weight:700;color:var(--text-primary);margin-bottom:0.5rem;">Data Accuracy Focus</div>
+        <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.8;">Corporate accounting trains you to be precise. I bring that same standard of quality to every spreadsheet, entry, and report.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- SERVICES -->
+<div id="services" class="full-w s-border" style="background:var(--bg-void);">
+<div class="inner s-pad">
+  <div class="s-label reveal">02 — Core Skills</div>
+  <h2 class="s-title reveal">What I Can<br>Handle For You.</h2>
+  <p class="s-sub reveal">Hands-on experience across accounting, finance admin, and client operations — built in a corporate environment and ready to apply remotely.</p>
+
+  <div class="services-grid">
+    <div class="svc-card reveal d1">
+      <span class="svc-icon"><i class="fa-solid fa-calculator"></i></span>
+      <div class="svc-name">Accounting Support</div>
+      <ul class="svc-list">
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Invoicing & Billing</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Bank Reconciliation</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Receipt Management</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Invoice Creation & Delivery</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Payment Tracking & Follow-ups</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Bill Logging & Scheduling</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Expense Report Compilation</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Generating Basic Reports</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Data Entry & Clean-up</li>
+      </ul>
+    </div>
+
+    <div class="svc-card reveal d2">
+      <span class="svc-icon"><i class="fa-solid fa-headset"></i></span>
+      <div class="svc-name">Client Communication</div>
+      <ul class="svc-list">
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Collection & Payment Follow-up Emails</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Sending Reports to Stakeholders</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Professional Email Correspondence</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Basic Email Support</li>
+      </ul>
+    </div>
+
+    <div class="svc-card reveal d3">
+      <span class="svc-icon"><i class="fa-solid fa-folder-open"></i></span>
+      <div class="svc-name">General Admin Support</div>
+      <ul class="svc-list">
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Data Entry</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Data Research</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>File Organization</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Calendar Management</li>
+        <li class="svc-item"><i class="fa-solid fa-circle-dot"></i>Email Management</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- WORKFLOW -->
+<style>
+#workflow { padding: 7rem 3rem; background: var(--bg-surface); position: relative; z-index: 1; }
+#workflow .wf-inner { max-width: 1200px; margin: 0 auto; }
+#workflow .wf-label { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.3em; color: var(--cyan); text-transform: uppercase; margin-bottom: 1.5rem; }
+#workflow .wf-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; color: var(--text-primary); max-width: 900px; margin-bottom: 1.5rem; font-weight: 700; }
+#workflow .wf-sub { color: var(--text-secondary); max-width: 760px; margin-bottom: 4rem; font-size: 1rem; line-height: 1.7; }
+#workflow .wf-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.25rem; margin-bottom: 3rem; }
+#workflow .wf-card { background: var(--bg-card); border: 1px solid var(--border); border-left: 2px solid var(--cyan); border-radius: 10px; padding: 1.5rem 1.35rem; transition: all 0.4s var(--ease-out); position: relative; }
+#workflow .wf-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--cyan),transparent); opacity:0; transition:opacity 0.4s var(--ease-out); }
+#workflow .wf-card:hover { background: var(--bg-card-hover); border-color: var(--border-bright); border-left-color: var(--cyan); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 28px var(--cyan-glow); }
+#workflow .wf-card:hover::before { opacity: 1; }
+#workflow .wf-step { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.2em; color: var(--cyan); margin-bottom: 1rem; font-weight: 600; }
+#workflow .wf-card h3 { font-family: var(--font-display); font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.85rem; font-weight: 600; line-height: 1.25; }
+#workflow .wf-card p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6; }
+#workflow .wf-cta-wrap { display: flex; justify-content: center; margin-top: 1rem; }
+#workflow .wf-cta {
+  display: inline-flex; align-items: center; gap: 0.8rem;
+  padding: 1.25rem 3rem;
+  background: linear-gradient(135deg, var(--cyan), var(--teal));
+  color: var(--bg-void);
+  font-family: var(--font-mono); font-size: 0.88rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.35s var(--ease-out);
+  box-shadow: 0 8px 32px rgba(0,212,255,0.35), 0 0 0 0 rgba(0,212,255,0);
+  position: relative; overflow: hidden;
+}
+#workflow .wf-cta::before {
+  content: '';
+  position: absolute; inset: -2px;
+  background: linear-gradient(135deg, var(--teal), var(--cyan), var(--teal));
+  border-radius: 6px; z-index: -1; opacity: 0;
+  transition: opacity 0.3s;
+}
+#workflow .wf-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(0,212,255,0.55), 0 0 0 4px rgba(0,212,255,0.15);
+}
+#workflow .wf-cta:hover::before { opacity: 1; }
+#workflow .wf-cta i { font-size: 1rem; transition: transform 0.3s var(--ease-out); }
+#workflow .wf-cta:hover i { transform: rotate(15deg) scale(1.15); }
+@media (max-width: 1100px) { #workflow .wf-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px) {
+  #workflow { padding: 5rem 1rem; }
+  #workflow .wf-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 2rem 1rem 2rem;
+    margin: 0 -1rem 2rem;
+    scrollbar-width: thin;
+    perspective: 900px;
+    perspective-origin: 50% 50%;
+  }
+  #workflow .wf-card {
+    flex: 0 0 78%;
+    scroll-snap-align: center;
+    padding: 1.25rem 1.1rem;
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    transition: transform 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+    will-change: transform, opacity;
+  }
+  #workflow .wf-card h3 { font-size: 1rem; }
+  #workflow .wf-card p { font-size: 0.8rem; }
+}
+</style>
+<section id="workflow">
+  <div class="wf-inner">
+    <h2 class="wf-title reveal">How I Work.</h2>
+    <p class="wf-sub reveal">My approach to every engagement — structured, transparent, and built to reduce the back-and-forth your team shouldn't have to manage.</p>
+    <div class="wf-grid">
+      <div class="wf-card reveal">
+        <div class="wf-step">01 // STEP</div>
+        <h3>Discovery Session</h3>
+        <p>We map your existing daily admin workflows, highlight spreadsheet friction, and isolate financial/reconciliation task lists. We find the high-impact bottlenecks we can solve immediately.</p>
+      </div>
+      <div class="wf-card reveal">
+        <div class="wf-step">02 // STEP</div>
+        <h3>Operational Diagnostic</h3>
+        <p>I outline a custom task assignment, defining accurate communication cadence, system login requirements, delivery timelines, and monthly allocated hours so you have complete visibility.</p>
+      </div>
+      <div class="wf-card reveal">
+        <div class="wf-step">03 // STEP</div>
+        <h3>Secure System Onboarding</h3>
+        <p>We configure encrypted system delegations and sandbox environment linkages. Utilizing strict protocols, we maintain absolute file confidentiality and protect client ledger security.</p>
+      </div>
+      <div class="wf-card reveal">
+        <div class="wf-step">04 // STEP</div>
+        <h3>Seamless Execution</h3>
+        <p>I assume absolute daily ownership of matching statements, generating billing packets, chasing open payments, and executing administrative items so you stay completely clear.</p>
+      </div>
+      <div class="wf-card reveal">
+        <div class="wf-step">05 // STEP</div>
+        <h3>Continuous Optimization</h3>
+        <p>We review progress periodically to introduce speed improvements, create automated dashboard alerts, compile operating manuals, and save you more structural hours week-on-week.</p>
+      </div>
+    </div>
+    <div class="wf-cta-wrap reveal">
+      <div style="text-align:center;">
+        <p style="font-family:var(--font-mono);font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.2rem;">Want the full picture?</p>
+        <a href="Pauline_Lucena_Resume.pdf" download class="wf-cta">
+          <i class="fa-solid fa-download"></i>
+          Download My Resume
+        </a>
+        <p style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-top:0.9rem;">PDF · Updated 2026 · Includes full work history</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- TOOLS -->
+<div id="tools" class="full-w s-border" style="background:var(--bg-surface);">
+<div class="inner s-pad">
+  <div class="s-label reveal">03 — Tools & Systems</div>
+  <h2 class="s-title reveal">Platforms I<br>Know Well.</h2>
+  <p class="s-sub reveal">Enterprise-level accounting software experience combined with everyday productivity tools — ready to plug into your stack from day one.</p>
+
+  <div class="tools-grid reveal">
+    <div class="tool-chip"><span class="tool-chip-name">NetSuite</span><span class="tool-chip-sub">Experienced ERP</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Quickbooks</span><span class="tool-chip-sub">Accounting Software</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Floqast</span><span class="tool-chip-sub">Close Workflow</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Excel</span><span class="tool-chip-sub">LOOKUPs & More</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Google WS</span><span class="tool-chip-sub">Workspace</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Office 365</span><span class="tool-chip-sub">Microsoft Suite</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Outlook</span><span class="tool-chip-sub">Email</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Gmail</span><span class="tool-chip-sub">Email</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Slack</span><span class="tool-chip-sub">Collaboration</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">MS Teams</span><span class="tool-chip-sub">Collaboration</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Google Docs</span><span class="tool-chip-sub">Documents</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Calendly</span><span class="tool-chip-sub">Scheduling</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Notion</span><span class="tool-chip-sub">Task Mgmt</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">ChatGPT</span><span class="tool-chip-sub">AI Assistant</span></div>
+    <div class="tool-chip"><span class="tool-chip-name">Claude AI</span><span class="tool-chip-sub">AI Assistant</span></div>
+  </div>
+</div>
+</div>
+
+<!-- EXPERIENCE & CONTACT placeholder — styles below -->
+<style>
+/* ── EXPERIENCE TIMELINE ── */
+.exp-list { display: flex; flex-direction: column; gap: 2rem; margin-bottom: 4rem; }
+.exp-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-left: 3px solid var(--cyan); border-radius: 4px;
+  padding: 2rem 2rem 2rem 2.2rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.exp-card:hover { border-color: var(--border-bright); box-shadow: 0 0 24px var(--cyan-glow); }
+.exp-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.exp-role { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+.exp-period { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); background: rgba(0,212,255,0.08); padding: 0.3rem 0.8rem; border-radius: 2px; white-space: nowrap; }
+.exp-company { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 1rem; }
+.exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+.exp-bullets li { display: flex; align-items: flex-start; gap: 0.7rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+.exp-bullets li i { color: var(--cyan); font-size: 0.6rem; margin-top: 0.45rem; flex-shrink: 0; }
+/* ── ACHIEVEMENT CHIPS ── */
+.achieve-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.achieve-chip {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 2rem 1.4rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+  transition: transform 0.4s var(--ease-out), box-shadow 0.4s, border-color 0.4s;
+  animation: chipFloat 4s ease-in-out infinite;
+}
+.achieve-chip:nth-child(1) { animation-delay: 0s; }
+.achieve-chip:nth-child(2) { animation-delay: 0.5s; }
+.achieve-chip:nth-child(3) { animation-delay: 1s; }
+.achieve-chip:nth-child(4) { animation-delay: 1.5s; }
+
+@keyframes chipFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* sweep glow border on hover */
+.achieve-chip::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: 8px;
+  background: conic-gradient(from var(--angle, 0deg), var(--cyan), var(--teal), transparent 40%, var(--cyan));
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: 0;
+  padding: 1px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.achieve-chip:hover::before { opacity: 1; }
+.achieve-chip:hover {
+  border-color: var(--border-bright);
+  box-shadow: 0 0 32px var(--cyan-glow), 0 12px 30px rgba(0,0,0,0.4);
+  animation: none;
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* spinning border animation */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spinBorder { to { --angle: 360deg; } }
+.achieve-chip:hover::before { animation: spinBorder 2s linear infinite; opacity: 0.8; }
+
+.achieve-val {
+  font-family: var(--font-display); font-size: 2.6rem; font-weight: 800;
+  line-height: 1; margin-bottom: 0.4rem;
+  background: linear-gradient(135deg, var(--cyan), var(--teal));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  position: relative; z-index: 1;
+}
+.achieve-lbl {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text-muted);
+  position: relative; z-index: 1;
+}
+
+@media (max-width: 900px) { .achieve-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 768px) { .exp-card { padding: 1.5rem; } }
+</style>
+
+<!-- EXPERIENCE -->
+<div id="experience" class="full-w s-border" style="background:var(--bg-void);">
+<div class="inner s-pad">
+  <div class="s-label reveal">04 — Work Experience</div>
+  <h2 class="s-title reveal">Where I've<br>Been Trained.</h2>
+  <p class="s-sub reveal">3+ years in corporate accounting — here's the actual work I've done, the tools I used, and the impact I delivered.</p>
+
+  <div class="exp-list">
+
+    <div class="exp-card reveal">
+      <div class="exp-top">
+        <div class="exp-role">Accounting Analyst</div>
+        <div class="exp-period">2024 — 2027</div>
+      </div>
+      <div class="exp-company">Corporate Finance · Philippines</div>
+      <ul class="exp-bullets">
+        <li><i class="fa-solid fa-circle-dot"></i>Handled full-cycle bank reconciliation across multiple accounts monthly with zero discrepancy record</li>
+        <li><i class="fa-solid fa-circle-dot"></i>Processed and tracked accounts payable and receivable, including payment scheduling and follow-ups</li>
+        <li><i class="fa-solid fa-circle-dot"></i>Prepared monthly financial reports — P&L summaries, expense breakdowns, and close-cycle documentation</li>
+        <li><i class="fa-solid fa-circle-dot"></i>Supported payroll processing and maintained accurate employee records for compliance</li>
+        <li><i class="fa-solid fa-circle-dot"></i>Used NetSuite and FloQast for transaction management, close workflows, and audit-ready record keeping</li>
+        <li><i class="fa-solid fa-circle-dot"></i>Coordinated with internal teams on document requests, data validation, and reporting deadlines</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="s-label reveal" style="margin-top:1rem;">Key Numbers</div>
+  <div class="achieve-grid reveal">
+    <div class="achieve-chip">
+      <div class="achieve-val stat-val" data-target="3" data-suffix="+">3+</div>
+      <div class="achieve-lbl">Years in Corporate Accounting</div>
+    </div>
+    <div class="achieve-chip">
+      <div class="achieve-val stat-val" data-target="100" data-suffix="%">100%</div>
+      <div class="achieve-lbl">Reconciliation Accuracy Rate</div>
+    </div>
+    <div class="achieve-chip">
+      <div class="achieve-val stat-val" data-target="0" data-suffix="">0</div>
+      <div class="achieve-lbl">Missed Reporting Deadlines</div>
+    </div>
+    <div class="achieve-chip">
+      <div class="achieve-val stat-val" data-target="15" data-suffix="+">15+</div>
+      <div class="achieve-lbl">Tools & Platforms Used</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="full-w s-border" style="background:var(--bg-void);">
+<div class="inner s-pad">
+  <div class="s-label reveal">05 — Get In Touch</div>
+  <h2 class="s-title reveal">Let's Talk<br>About the Role.</h2>
+  <p class="s-sub reveal">I'm open to full-time, part-time, and project-based remote positions. Reach out directly — I respond within 1 business day.</p>
+
+  <div class="contact-grid">
+    <div class="reveal">
+      <p>I bring 3+ years of corporate accounting experience and I'm ready to contribute to a remote team from day one. If my background looks like a fit, I'd love to connect.</p>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/pauline-lucena-8663a616a" target="_blank" class="contact-link">
+          <i class="fa-brands fa-linkedin"></i>
+          <div><span class="cl-label">LinkedIn</span><span class="cl-val">Pauline Lucena</span></div>
+        </a>
+        <a href="mailto:paulinelucena27@gmail.com" class="contact-link">
+          <i class="fa-solid fa-envelope"></i>
+          <div><span class="cl-label">Email</span><span class="cl-val">paulinelucena27@gmail.com</span></div>
+        </a>
+        <a href="https://wa.me/qr/NZFGQQNZY3GNC1" target="_blank" class="contact-link">
+          <i class="fa-brands fa-whatsapp"></i>
+          <div><span class="cl-label">WhatsApp</span><span class="cl-val">Message me on WhatsApp</span></div>
+        </a>
+        <a href="Certificates.html" target="_blank" class="contact-link">
+          <i class="fa-solid fa-certificate"></i>
+          <div><span class="cl-label">Certificates</span><span class="cl-val">View my credentials</span></div>
+        </a>
+      </div>
+      <div style="margin-top:1.8rem;">
+        <a href="Pauline_Lucena_Resume.pdf" download
+           style="display:inline-flex;align-items:center;gap:0.75rem;
+                  padding:1.1rem 2rem;
+                  background:linear-gradient(135deg, var(--cyan), var(--teal));
+                  color:var(--bg-void);
+                  font-family:var(--font-mono);font-size:0.82rem;font-weight:700;
+                  letter-spacing:2px;text-transform:uppercase;
+                  border-radius:4px;text-decoration:none;
+                  box-shadow:0 8px 28px rgba(0,212,255,0.3);
+                  transition:all 0.3s;"
+           onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 16px 40px rgba(0,212,255,0.45)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 8px 28px rgba(0,212,255,0.3)'">
+          <i class="fa-solid fa-download"></i>
+          Download Resume
+        </a>
+        <p style="margin-top:0.75rem;font-family:var(--font-mono);font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);">PDF · Updated 2026 · Full work history included</p>
+      </div>
+    </div>
+
+    <div class="reveal d2">
+      <form class="contact-form" id="contact-form">
+        <input type="hidden" name="_subject" value="Hiring Inquiry — Pauline Lucena">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="fc-name">Your name</label>
+            <input id="fc-name" type="text" name="name" class="form-input" placeholder="Jane Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="fc-email">Work email</label>
+            <input id="fc-email" type="email" name="email" class="form-input" placeholder="you@company.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="fc-need">Role type</label>
+          <select id="fc-need" name="need" class="form-input form-select" required>
+            <option value="">Select one…</option>
+            <option>Full-time remote position</option>
+            <option>Part-time / flexible hours</option>
+            <option>Project-based / contract</option>
+            <option>Trial / test task first</option>
+            <option>Just exploring — open to chat</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="fc-msg">Tell me about the role</label>
+          <textarea id="fc-msg" name="message" class="form-textarea" placeholder="What does the position involve? Tools you use, expected hours, team structure…" required></textarea>
+          <span class="form-submit-note" style="text-align:left;margin-top:0.4rem;text-transform:none;letter-spacing:0.3px;">The more context you share, the better I can assess fit.</span>
+        </div>
+        <button type="submit" class="form-submit" id="form-btn">Send Message →</button>
+        <p class="form-submit-note">I reply within 1 business day · No recruiters please</p>
+        <p id="form-status" style="margin-top:0.8rem;font-size:0.78rem;display:none;"></p>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <span>© 2026 Pauline Lucena. All rights reserved.</span>
+  <span>Accounting & Finance VA · Open to Remote Work · Philippines</span>
+</footer>
+
+<script>
+// ── HERO CANVAS — Professional Particle Network ──
+const canvas = document.getElementById('hero-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, nodes = [];
+const mouse = { x: null, y: null, active: false };
+let t = 0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); initNodes(); });
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true; });
+window.addEventListener('mouseleave', () => { mouse.active = false; });
+
+class Node {
+  constructor() { this.reset(true); }
+  reset(rand = false) {
+    this.x  = Math.random() * W;
+    this.y  = rand ? Math.random() * H : Math.random() * H;
+    // Very slow drift — professional feel
+    const angle = Math.random() * Math.PI * 2;
+    const spd   = Math.random() * 0.22 + 0.06;
+    this.vx = Math.cos(angle) * spd;
+    this.vy = Math.sin(angle) * spd;
+    // Slight size variation: most are tiny dots, a few are a touch larger
+    this.r  = Math.random() < 0.15 ? Math.random() * 1.8 + 1.2 : Math.random() * 0.9 + 0.4;
+    this.baseAlpha = Math.random() * 0.55 + 0.2;
+    this.alpha = this.baseAlpha;
+    // Pulse offset so nodes breathe at different phases
+    this.phase = Math.random() * Math.PI * 2;
+    // Subtle color variation: cyan or teal
+    this.hue = Math.random() > 0.4 ? 190 : 168;
+  }
+  update(t) {
+    // Gentle autonomous drift
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Soft mouse repulsion — nodes elegantly part for the cursor
+    if (mouse.active) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const repelR = 130;
+      if (dist < repelR && dist > 0) {
+        const force = (repelR - dist) / repelR;
+        this.x += (dx / dist) * force * 1.8;
+        this.y += (dy / dist) * force * 1.8;
+      }
+    }
+
+    // Bounce softly off edges
+    if (this.x < 0) { this.x = 0; this.vx *= -1; }
+    if (this.x > W) { this.x = W; this.vx *= -1; }
+    if (this.y < 0) { this.y = 0; this.vy *= -1; }
+    if (this.y > H) { this.y = H; this.vy *= -1; }
+
+    // Breathing pulse
+    this.alpha = this.baseAlpha * (0.75 + 0.25 * Math.sin(t * 0.012 + this.phase));
+  }
+  draw() {
+    // Soft glow halo
+    const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 5);
+    grd.addColorStop(0,   `hsla(${this.hue},100%,72%,${this.alpha * 0.55})`);
+    grd.addColorStop(1,   `hsla(${this.hue},100%,72%,0)`);
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r * 5, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+
+    // Crisp core dot
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${this.hue},100%,82%,${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+function initNodes() {
+  nodes = [];
+  // Fewer, higher-quality nodes — cleaner professional look
+  const n = Math.min(90, Math.floor((W * H) / 14000));
+  for (let i = 0; i < n; i++) nodes.push(new Node());
+}
+initNodes();
+
+// Aurora gradient that slowly shifts across the background
+function drawAurora(t) {
+  // Left aurora
+  const g1 = ctx.createRadialGradient(W * 0.12, H * 0.35, 0, W * 0.12, H * 0.35, W * 0.42);
+  g1.addColorStop(0, `rgba(0,180,220,${0.04 + 0.015 * Math.sin(t * 0.007)})`);
+  g1.addColorStop(1, 'rgba(0,180,220,0)');
+  ctx.fillStyle = g1;
+  ctx.fillRect(0, 0, W, H);
+
+  // Right aurora
+  const g2 = ctx.createRadialGradient(W * 0.88, H * 0.65, 0, W * 0.88, H * 0.65, W * 0.38);
+  g2.addColorStop(0, `rgba(0,220,160,${0.035 + 0.012 * Math.sin(t * 0.009 + 1)})`);
+  g2.addColorStop(1, 'rgba(0,220,160,0)');
+  ctx.fillStyle = g2;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawConnections() {
+  const CONNECT_DIST = 160;
+  const MOUSE_DIST   = 200;
+
+  for (let i = 0; i < nodes.length; i++) {
+    // Node-to-node connections
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const d  = Math.sqrt(dx * dx + dy * dy);
+      if (d < CONNECT_DIST) {
+        const opacity = (1 - d / CONNECT_DIST) * 0.18;
+        ctx.strokeStyle = `rgba(0,210,255,${opacity})`;
+        ctx.lineWidth   = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.stroke();
+      }
+    }
+
+    // Mouse-to-node connections — elegant reach lines
+    if (mouse.active) {
+      const dx = nodes[i].x - mouse.x;
+      const dy = nodes[i].y - mouse.y;
+      const d  = Math.sqrt(dx * dx + dy * dy);
+      if (d < MOUSE_DIST) {
+        const opacity = (1 - d / MOUSE_DIST) * 0.38;
+        const grad = ctx.createLinearGradient(mouse.x, mouse.y, nodes[i].x, nodes[i].y);
+        grad.addColorStop(0, `rgba(0,255,204,${opacity})`);
+        grad.addColorStop(1, `rgba(0,210,255,0)`);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(mouse.x, mouse.y);
+        ctx.lineTo(nodes[i].x, nodes[i].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function frame() {
+  t++;
+  // Clear with a very slight trail for smooth motion
+  ctx.fillStyle = 'rgba(2,4,9,0.88)';
+  ctx.fillRect(0, 0, W, H);
+
+  drawAurora(t);
+  drawConnections();
+  nodes.forEach(n => { n.update(t); n.draw(); });
+
+  requestAnimationFrame(frame);
+}
+frame();
+
+// ── REVEAL SCROLL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── STAT COUNT-UP ──
+const animateCount = el => {
+  const target = parseFloat(el.dataset.target) || 0;
+  const suffix = el.dataset.suffix !== undefined ? el.dataset.suffix : (el.textContent.trim().replace(/[\d.,\s]/g, '') || '');
+  const duration = Math.max(1400, target < 10 ? 2200 : 1800);
+  const start = performance.now();
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  el.style.transition = 'transform 0.25s var(--ease-out)';
+  const tick = now => {
+    const p = Math.min((now - start) / duration, 1);
+    const val = Math.round(target * ease(p));
+    el.textContent = val + suffix;
+    el.style.transform = p < 1 ? 'scale(1.06)' : 'scale(1)';
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  el.textContent = '0' + suffix;
+  requestAnimationFrame(tick);
+};
+const statObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCount(entry.target);
+      statObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.stat-val[data-target]').forEach(el => statObserver.observe(el));
+
+// ── TYPEWRITER ──
+const typewriter = [
+  'Reconciliation. Reporting. Results.',
+  'Accurate books. On time. Every time.',
+  'Corporate experience. Remote-ready.',
+];
+let typeIdx = 0, charIdx = 0, isDeleting = false;
+const typeEl = document.getElementById('hero-typewriter');
+
+function typeLoop() {
+  const txt = typewriter[typeIdx];
+  charIdx = isDeleting ? charIdx - 1 : charIdx + 1;
+  typeEl.textContent = txt.substring(0, charIdx);
+  if (charIdx === txt.length && !isDeleting) {
+    isDeleting = true;
+    setTimeout(typeLoop, 2200);
+  } else if (charIdx === 0 && isDeleting) {
+    isDeleting = false;
+    typeIdx = (typeIdx + 1) % typewriter.length;
+    setTimeout(typeLoop, 300);
+  } else {
+    setTimeout(typeLoop, isDeleting ? 40 : 45);
+  }
+}
+typeLoop();
+
+// ── FORM ──
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const fd = new FormData(contactForm);
+    const formBtn = document.getElementById('form-btn');
+    formBtn.disabled = true;
+    formBtn.textContent = 'Sending…';
+    try {
+      const res = await fetch('https://formspree.io/f/mwpzaovr', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+      if (res.ok) {
+        const status = document.getElementById('form-status');
+        status.textContent = '✓ Message sent. Replying within 1 business day.';
+        status.style.display = 'block';
+        status.style.color = 'var(--teal)';
+        contactForm.reset();
+        setTimeout(() => {
+          formBtn.disabled = false;
+          formBtn.textContent = 'Send brief →';
+          status.style.display = 'none';
+        }, 4000);
+      }
+    } catch (err) {
+      console.error(err);
+      formBtn.disabled = false;
+      formBtn.textContent = 'Send brief →';
+    }
+  });
+}
+
+// ── PORTRAIT RING ANIMATION ──
+const style = document.createElement('style');
+style.textContent = '@keyframes portraitRing { 0%{transform:scale(1);} 50%{transform:scale(1.08);} 100%{transform:scale(1);} }';
+document.head.appendChild(style);
+
+// ── CYLINDRICAL WORKFLOW CAROUSEL (mobile) ──
+(function(){
+  const grid = document.querySelector('#workflow .wf-grid');
+  if (!grid) return;
+  const cards = Array.from(grid.querySelectorAll('.wf-card'));
+  const mq = window.matchMedia('(max-width: 760px)');
+  let raf = null;
+
+  function update() {
+    raf = null;
+    if (!mq.matches) { cards.forEach(c => c.style.transform = ''); return; }
+    const gRect = grid.getBoundingClientRect();
+    const centerX = gRect.left + gRect.width / 2;
+    const maxDist = gRect.width / 2 + 100;
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const dx = cx - centerX;
+      const ratio = Math.max(-1.2, Math.min(1.2, dx / maxDist));
+      const rotY = ratio * -55;          // cylindrical tilt
+      const tz = -Math.abs(ratio) * 120;  // push side cards back
+      const scale = 1 - Math.abs(ratio) * 0.12;
+      const opacity = 1 - Math.abs(ratio) * 0.45;
+      card.style.transform = `translateZ(${tz}px) rotateY(${rotY}deg) scale(${scale})`;
+      card.style.opacity = opacity;
+    });
+  }
+  function onScroll(){ if (raf == null) raf = requestAnimationFrame(update); }
+  grid.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  mq.addEventListener?.('change', onScroll);
+  // initial
+  requestAnimationFrame(update);
+})();
+</script>
+
+</body>
+</html>
