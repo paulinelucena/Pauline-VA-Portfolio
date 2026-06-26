@@ -873,13 +873,12 @@ section, [id], .full-w { }
 var GITHUB_PAGES_BASE = '';
 
 function getResumeUrl() {
-  // Use Google Docs Viewer on mobile for reliable PDF rendering
+  // Always use Google Docs Viewer for reliable PDF rendering across all
+  // browsers/devices. Relying on the browser's native PDF plugin (the old
+  // desktop-only path) silently breaks for visitors who have "download PDFs"
+  // turned on, or who have an extension that intercepts embedded PDFs.
   var pdfPath = (GITHUB_PAGES_BASE || window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '')) + '/Pauline_Lucena_Resume.pdf';
-  var isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
-  if (isMobile) {
-    return 'https://docs.google.com/viewer?url=' + encodeURIComponent(pdfPath) + '&embedded=true';
-  }
-  return 'Pauline_Lucena_Resume.pdf#toolbar=0&navpanes=0&scrollbar=1';
+  return 'https://docs.google.com/viewer?url=' + encodeURIComponent(pdfPath) + '&embedded=true';
 }
 
 function openResumeModal() {
