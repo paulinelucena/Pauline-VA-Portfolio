@@ -713,13 +713,14 @@ section, [id], .full-w { }
   display: flex; align-items: center; justify-content: center;
   opacity: 0; pointer-events: none;
   transition: opacity 0.35s var(--ease-out);
+  padding: 1rem;
 }
 .resume-modal-overlay.open { opacity: 1; pointer-events: auto; }
 
 .resume-modal {
   position: relative;
-  width: min(860px, 94vw);
-  max-height: 90vh;
+  width: min(860px, 100%);
+  height: 90vh;
   background: var(--bg-card);
   border: 1px solid var(--border-bright);
   border-radius: 6px;
@@ -733,6 +734,18 @@ section, [id], .full-w { }
   transform: translateY(0) scale(1);
 }
 
+/* Full-screen on mobile */
+@media (max-width: 768px) {
+  .resume-modal-overlay { padding: 0; align-items: flex-end; }
+  .resume-modal {
+    width: 100%; height: 92vh;
+    border-radius: 16px 16px 0 0;
+    border-left: none; border-right: none; border-bottom: none;
+    transform: translateY(100%);
+  }
+  .resume-modal-overlay.open .resume-modal { transform: translateY(0); }
+}
+
 .resume-modal-bar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 1.4rem;
@@ -740,6 +753,20 @@ section, [id], .full-w { }
   background: var(--bg-surface);
   flex-shrink: 0;
 }
+
+/* Mobile drag handle */
+.resume-modal-handle {
+  display: none;
+  width: 40px; height: 4px;
+  background: var(--border-bright); border-radius: 2px;
+  margin: 0.6rem auto 0;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .resume-modal-handle { display: block; }
+  .resume-modal-bar { padding: 0.75rem 1rem; }
+}
+
 .resume-modal-title {
   font-family: var(--font-mono); font-size: 0.72rem;
   letter-spacing: 2px; text-transform: uppercase;
@@ -748,6 +775,11 @@ section, [id], .full-w { }
 .resume-modal-title::before {
   content: ''; width: 20px; height: 1px; background: var(--cyan);
 }
+@media (max-width: 768px) {
+  .resume-modal-title { font-size: 0.65rem; letter-spacing: 1.5px; }
+  .resume-modal-title::before { display: none; }
+}
+
 .resume-modal-actions {
   display: flex; align-items: center; gap: 0.8rem;
 }
@@ -760,85 +792,124 @@ section, [id], .full-w { }
   display: inline-flex; align-items: center; gap: 0.5rem;
   text-decoration: none;
   transition: background 0.25s;
+  white-space: nowrap;
 }
 .resume-modal-dl:hover { background: var(--teal); }
+@media (max-width: 768px) {
+  .resume-modal-dl { font-size: 0.65rem; padding: 0.5rem 0.9rem; letter-spacing: 1px; }
+  .resume-modal-dl span { display: none; } /* hide "Download" text, keep icon */
+}
+
 .resume-modal-close {
   background: transparent; border: 1px solid var(--border-bright);
   color: var(--text-muted); width: 34px; height: 34px;
   border-radius: 3px; cursor: pointer; font-size: 1rem;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.2s; flex-shrink: 0;
 }
 .resume-modal-close:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+@media (max-width: 768px) {
+  .resume-modal-close { width: 40px; height: 40px; font-size: 1.1rem; }
+}
 
 .resume-modal-body {
   flex: 1; overflow: hidden; display: flex;
-  min-height: 0;
+  min-height: 0; position: relative;
 }
 .resume-modal-body iframe {
-  width: 100%; height: 100%; border: none; min-height: 520px;
+  width: 100%; height: 100%; border: none;
   display: block;
 }
-.resume-modal-fallback {
-  display: none; flex-direction: column; align-items: center; justify-content: center;
-  gap: 1.2rem; padding: 3rem 2rem; text-align: center; flex: 1;
+
+/* Loading spinner shown while iframe loads */
+.resume-modal-loading {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1rem; background: var(--bg-card); z-index: 2;
+  transition: opacity 0.3s;
 }
-.resume-modal-fallback p {
-  font-size: 0.9rem; color: var(--text-secondary); max-width: 360px; line-height: 1.7;
+.resume-modal-loading.hidden { opacity: 0; pointer-events: none; }
+.spinner {
+  width: 36px; height: 36px;
+  border: 2px solid var(--border);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.resume-modal-loading p {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
 }
 </style>
 
 <div class="resume-modal-overlay" id="resumeModal" role="dialog" aria-modal="true" aria-label="Resume Preview">
   <div class="resume-modal">
+    <div class="resume-modal-handle"></div>
     <div class="resume-modal-bar">
       <div class="resume-modal-title">Pauline Lucena — Resume</div>
       <div class="resume-modal-actions">
         <a href="Pauline_Lucena_Resume.pdf" download class="resume-modal-dl">
-          <i class="fa-solid fa-download"></i> Download
+          <i class="fa-solid fa-download"></i> <span>Download</span>
         </a>
         <button class="resume-modal-close" onclick="closeResumeModal()" aria-label="Close preview">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
     </div>
-    <div class="resume-modal-body" id="resumeModalBody">
-      <iframe id="resumeIframe" title="Resume Preview"
-        src="Pauline_Lucena_Resume.pdf#toolbar=0&navpanes=0&scrollbar=1">
-      </iframe>
-      <div class="resume-modal-fallback" id="resumeFallback">
-        <i class="fa-solid fa-file-pdf" style="font-size:2.5rem;color:var(--cyan);"></i>
-        <p>Your browser can't preview this PDF inline. Download it to view.</p>
-        <a href="Pauline_Lucena_Resume.pdf" download class="resume-modal-dl">
-          <i class="fa-solid fa-download"></i> Download Resume
-        </a>
+    <div class="resume-modal-body">
+      <div class="resume-modal-loading" id="resumeLoading">
+        <div class="spinner"></div>
+        <p>Loading resume…</p>
       </div>
+      <iframe id="resumeIframe" title="Resume Preview" onload="resumeIframeLoaded()"></iframe>
     </div>
   </div>
 </div>
 
 <script>
+// Replace with your actual GitHub Pages base URL (no trailing slash)
+// e.g. 'https://yourusername.github.io/your-repo'
+var GITHUB_PAGES_BASE = '';
+
+function getResumeUrl() {
+  // Use Google Docs Viewer on mobile for reliable PDF rendering
+  var pdfPath = (GITHUB_PAGES_BASE || window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '')) + '/Pauline_Lucena_Resume.pdf';
+  var isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+  if (isMobile) {
+    return 'https://docs.google.com/viewer?url=' + encodeURIComponent(pdfPath) + '&embedded=true';
+  }
+  return 'Pauline_Lucena_Resume.pdf#toolbar=0&navpanes=0&scrollbar=1';
+}
+
 function openResumeModal() {
-  const overlay = document.getElementById('resumeModal');
+  var overlay = document.getElementById('resumeModal');
+  var iframe = document.getElementById('resumeIframe');
+  var loading = document.getElementById('resumeLoading');
+
+  // Reset loading state
+  loading.classList.remove('hidden');
+  iframe.src = '';
+
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Detect if iframe loaded (Safari / mobile can't render PDFs inline)
-  const iframe = document.getElementById('resumeIframe');
-  const fallback = document.getElementById('resumeFallback');
-  const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
-  if (isMobile) {
-    iframe.style.display = 'none';
-    fallback.style.display = 'flex';
-  } else {
-    iframe.style.display = 'block';
-    fallback.style.display = 'none';
-  }
+  // Set src after modal opens so loading spinner shows first
+  setTimeout(function() { iframe.src = getResumeUrl(); }, 100);
+}
+
+function resumeIframeLoaded() {
+  var loading = document.getElementById('resumeLoading');
+  loading.classList.add('hidden');
 }
 
 function closeResumeModal() {
-  const overlay = document.getElementById('resumeModal');
+  var overlay = document.getElementById('resumeModal');
+  var iframe = document.getElementById('resumeIframe');
   overlay.classList.remove('open');
   document.body.style.overflow = '';
+  // Clear iframe src to stop any ongoing load
+  setTimeout(function() { iframe.src = ''; }, 400);
 }
 
 // Close on backdrop click
@@ -1366,7 +1437,7 @@ document.addEventListener('keydown', function(e) {
           <span class="form-submit-note" style="text-align:left;margin-top:0.4rem;text-transform:none;letter-spacing:0.3px;">The more context you share, the better I can assess fit.</span>
         </div>
         <button type="submit" class="form-submit" id="form-btn">Send Message →</button>
-        <p class="form-submit-note">I reply within 1 business day · Open to direct client inquiries</p>
+        <p class="form-submit-note">I reply within 1 business day · No recruiters please</p>
         <p id="form-status" style="margin-top:0.8rem;font-size:0.78rem;display:none;"></p>
       </form>
     </div>
