@@ -704,6 +704,154 @@ section, [id], .full-w { }
 })();
 </script>
 
+<!-- RESUME PREVIEW MODAL -->
+<style>
+.resume-modal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(2,4,9,0.92);
+  backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s var(--ease-out);
+}
+.resume-modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+.resume-modal {
+  position: relative;
+  width: min(860px, 94vw);
+  max-height: 90vh;
+  background: var(--bg-card);
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.7), 0 0 40px rgba(0,212,255,0.08);
+  transform: translateY(24px) scale(0.98);
+  transition: transform 0.4s var(--ease-out);
+  overflow: hidden;
+}
+.resume-modal-overlay.open .resume-modal {
+  transform: translateY(0) scale(1);
+}
+
+.resume-modal-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+  flex-shrink: 0;
+}
+.resume-modal-title {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--cyan); display: flex; align-items: center; gap: 0.8rem;
+}
+.resume-modal-title::before {
+  content: ''; width: 20px; height: 1px; background: var(--cyan);
+}
+.resume-modal-actions {
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.resume-modal-dl {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  letter-spacing: 2px; text-transform: uppercase;
+  background: var(--cyan); color: var(--bg-void);
+  padding: 0.55rem 1.2rem; border-radius: 3px;
+  font-weight: 700; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  text-decoration: none;
+  transition: background 0.25s;
+}
+.resume-modal-dl:hover { background: var(--teal); }
+.resume-modal-close {
+  background: transparent; border: 1px solid var(--border-bright);
+  color: var(--text-muted); width: 34px; height: 34px;
+  border-radius: 3px; cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.resume-modal-close:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+
+.resume-modal-body {
+  flex: 1; overflow: hidden; display: flex;
+  min-height: 0;
+}
+.resume-modal-body iframe {
+  width: 100%; height: 100%; border: none; min-height: 520px;
+  display: block;
+}
+.resume-modal-fallback {
+  display: none; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1.2rem; padding: 3rem 2rem; text-align: center; flex: 1;
+}
+.resume-modal-fallback p {
+  font-size: 0.9rem; color: var(--text-secondary); max-width: 360px; line-height: 1.7;
+}
+</style>
+
+<div class="resume-modal-overlay" id="resumeModal" role="dialog" aria-modal="true" aria-label="Resume Preview">
+  <div class="resume-modal">
+    <div class="resume-modal-bar">
+      <div class="resume-modal-title">Pauline Lucena — Resume</div>
+      <div class="resume-modal-actions">
+        <a href="Pauline_Lucena_Resume.pdf" download class="resume-modal-dl">
+          <i class="fa-solid fa-download"></i> Download
+        </a>
+        <button class="resume-modal-close" onclick="closeResumeModal()" aria-label="Close preview">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+    <div class="resume-modal-body" id="resumeModalBody">
+      <iframe id="resumeIframe" title="Resume Preview"
+        src="Pauline_Lucena_Resume.pdf#toolbar=0&navpanes=0&scrollbar=1">
+      </iframe>
+      <div class="resume-modal-fallback" id="resumeFallback">
+        <i class="fa-solid fa-file-pdf" style="font-size:2.5rem;color:var(--cyan);"></i>
+        <p>Your browser can't preview this PDF inline. Download it to view.</p>
+        <a href="Pauline_Lucena_Resume.pdf" download class="resume-modal-dl">
+          <i class="fa-solid fa-download"></i> Download Resume
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openResumeModal() {
+  const overlay = document.getElementById('resumeModal');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Detect if iframe loaded (Safari / mobile can't render PDFs inline)
+  const iframe = document.getElementById('resumeIframe');
+  const fallback = document.getElementById('resumeFallback');
+  const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    iframe.style.display = 'none';
+    fallback.style.display = 'flex';
+  } else {
+    iframe.style.display = 'block';
+    fallback.style.display = 'none';
+  }
+}
+
+function closeResumeModal() {
+  const overlay = document.getElementById('resumeModal');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.getElementById('resumeModal').addEventListener('click', function(e) {
+  if (e.target === this) closeResumeModal();
+});
+
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeResumeModal();
+});
+</script>
+
 <!-- HERO -->
 <section class="hero" id="home">
   <canvas id="hero-canvas"></canvas>
@@ -722,7 +870,7 @@ section, [id], .full-w { }
       &gt; <span id="hero-typewriter"></span><span class="cursor-blink">_</span>
     </div>
     <div class="hero-cta-row">
-      <a href="Pauline_Lucena_Resume.pdf" download class="btn-primary"><i class="fa-solid fa-download" style="margin-right:0.5rem;"></i>Download Resume</a>
+      <button onclick="openResumeModal()" class="btn-primary"><i class="fa-solid fa-download" style="margin-right:0.5rem;"></i>Download Resume</button>
       <a href="#contact" class="btn-ghost">Get In Touch →</a>
     </div>
   </div>
