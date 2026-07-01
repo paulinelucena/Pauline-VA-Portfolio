@@ -1407,7 +1407,9 @@ document.addEventListener('keydown', function(e) {
 
     <div class="reveal d2">
       <form class="contact-form" id="contact-form">
-        <input type="hidden" name="_subject" value="Hiring Inquiry — Pauline Lucena">
+        <input type="hidden" name="access_key" value="5a482a37-6ef2-4b78-b69d-07f239f4be34">
+        <input type="hidden" name="subject" value="Hiring Inquiry — Pauline Lucena">
+        <input type="hidden" name="from_name" value="Portfolio Contact Form">
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="fc-name">Your name</label>
@@ -1683,26 +1685,57 @@ if (contactForm) {
     e.preventDefault();
     const fd = new FormData(contactForm);
     const formBtn = document.getElementById('form-btn');
+    const status = document.getElementById('form-status');
     formBtn.disabled = true;
     formBtn.textContent = 'Sending…';
+
+    // Safety net: never let the button hang forever, even if the
+    // request stalls (slow network, dropped connection, etc.)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s max wait
+
     try {
-      const res = await fetch('https://formspree.io/f/mwpzaovr', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
-      if (res.ok) {
-        const status = document.getElementById('form-status');
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: fd,
+        headers: { Accept: 'application/json' },
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data && data.success) {
         status.textContent = '✓ Message sent. Replying within 1 business day.';
         status.style.display = 'block';
         status.style.color = 'var(--teal)';
         contactForm.reset();
         setTimeout(() => {
           formBtn.disabled = false;
-          formBtn.textContent = 'Send brief →';
+          formBtn.textContent = 'Send Message →';
           status.style.display = 'none';
         }, 4000);
+      } else {
+        // Non-OK response, or Web3Forms returned success:false — surface
+        // the real reason instead of leaving the button stuck forever.
+        const message = (data && data.message) || 'Something went wrong. Please try again or email me directly.';
+        status.textContent = '✕ ' + message;
+        status.style.display = 'block';
+        status.style.color = '#ff6b6b';
+        formBtn.disabled = false;
+        formBtn.textContent = 'Send Message →';
       }
     } catch (err) {
+      clearTimeout(timeoutId);
       console.error(err);
+      const timedOut = err.name === 'AbortError';
+      status.textContent = timedOut
+        ? '✕ Request timed out. Please check your connection and try again.'
+        : '✕ Could not send. Please try again or email me directly.';
+      status.style.display = 'block';
+      status.style.color = '#ff6b6b';
       formBtn.disabled = false;
-      formBtn.textContent = 'Send brief →';
+      formBtn.textContent = 'Send Message →';
     }
   });
 }
